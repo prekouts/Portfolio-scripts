@@ -1,0 +1,15 @@
+local on = true
+
+script.Parent.MouseButton1Click:Connect(function()
+	if on then
+		on = false
+		script.Parent.Text = 'Off'
+		script.Parent.BackgroundColor3 = Color3.fromRGB(193, 50, 45)
+		game.Lighting.GlobalShadows = false
+	else
+		on = true
+		script.Parent.Text = 'On'
+		game.Lighting.GlobalShadows = true
+		script.Parent.BackgroundColor3 = Color3.fromRGB(43, 156, 46)
+	end
+end)
