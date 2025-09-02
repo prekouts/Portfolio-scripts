@@ -1,0 +1,10 @@
+local TextLabel = script.Parent:WaitForChild("TextLabelTime") 
+local count = 0 
+
+while true do
+	count = count + 1 
+	local minutes = math.floor(count / 60) 
+	local seconds = count % 60 
+	TextLabel.Text = string.format("%02d:%02d", minutes, seconds) 
+	task.wait(1) 
+end
