@@ -1,0 +1,36 @@
+local groups = {-------, -----}
+local teams = {
+	[----] = "#########", -- left the group and team name gone just cause.
+	[----] = "#########"
+}
+
+local function add(player)
+
+	local ls = Instance.new("Folder")
+	ls.Name = "leaderstats"
+	ls.Parent = player
+
+	local role = Instance.new("StringValue")
+	role.Name = "Rank"
+	role.Value = "Guest"
+	role.Parent = ls
+
+	local choseteam = nil
+	for i, v in ip airs(groups) do
+		if player:IsInGroup(v) then
+			role.Value = player:GetRoleInGroup(v)
+			choseteam = teams[v]
+			break
+		end
+	end
+
+	if choseteam then
+		local teamo = game.Teams:FindFirstChild(choseteam)
+		if teamo then
+			player.Team = teamo
+			player:LoadCharacter()
+		end
+	end
+end
+
+game.Players.PlayerAdded:Connect(add)
