@@ -1,0 +1,33 @@
+local doormodule = {}
+local ts = game:GetService("TweenService")
+
+function doormodule.dooropener(DoorModel)
+	local Door = DoorModel
+	local Hinge = Door:WaitForChild("Hinge")
+	local clickDetector = Door:WaitForChild("ClickDetector")
+	
+	local open = false
+	local openstate = {}
+	openstate.CFrame = Hinge.CFrame * CFrame.Angles(0,math.rad(90),0)
+
+	local closestate = {}
+	closestate.CFrame = Hinge.CFrame * CFrame.Angles(0,0,0)
+
+	local tweeninfo = TweenInfo.new(1)
+	local openani = ts:Create(Hinge, tweeninfo, openstate)
+	local closeani = ts:Create(Hinge, tweeninfo, closestate)
+
+	clickDetector.MouseClick:Connect(function()
+		print('clicked')
+		if not open then
+			open = true
+			openani:Play()
+		else
+			open = false
+			closeani:Play()
+		end
+	end)
+end
+
+
+return doormodule
