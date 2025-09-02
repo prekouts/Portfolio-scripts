@@ -1,17 +1,1 @@
-local rocket = workspace:FindFirstChild("rocket")
-local fuel = 100 
-
-script.Parent.ClickDetector.MouseClick:Connect(function()
-	if rocket and rocket:IsA("BasePart") then
-		rocket.Anchored = false
-
-		local bv = Instance.new("BodyVelocity")
-		bv.Velocity = rocket.CFrame.RightVector * 50 
-		bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge) 
-		bv.P = 1250
-		bv.Parent = rocket
-
-		task.wait(10)
-		bv:Destroy()
-	end
-end)
+-- go to the rocket branch to see everything
