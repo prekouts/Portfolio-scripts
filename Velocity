@@ -1,0 +1,14 @@
+local sign = script.Parent
+local surfaceGui = sign:FindFirstChildOfClass("SurfaceGui")
+local textLabel = surfaceGui and surfaceGui:FindFirstChildOfClass("TextLabel")
+local rocket = workspace:FindFirstChild("rocket")
+
+while true do
+	local velocity = rocket.Velocity 
+	local speed = velocity.Magnitude 
+
+	textLabel.Text = string.format("Speed: %.2f\nVector: (%.2f, %.2f, %.2f)", -- had to get some help to know how to format
+		speed, velocity.X, velocity.Y, velocity.Z)
+
+	task.wait(0.05) 
+end
