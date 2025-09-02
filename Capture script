@@ -1,0 +1,38 @@
+local part = game.Workspace.base1
+local part2 = game.Workspace.base 
+local touched = false 
+local touchedplayers = {}
+
+local originalColor1 = part.Color
+local originalColor2 = part2.Color
+
+part.Touched:Connect(function(hit) 
+	local character = hit.Parent
+	local player = game.Players:GetPlayerFromCharacter(character)
+	
+	if player and not touchedplayers[player] then 
+		local leaderstats = player:FindFirstChild("leaderstats")
+		local captures = leaderstats and leaderstats:FindFirstChild("Captures")
+		
+		touchedplayers[player] = true
+		
+		if captures then
+			captures.Value +=1
+			print("captured") -- debug just incase if it break whenever roblox updates somethin
+		end
+		
+		task.delay(10,function() 
+			touchedplayers[player] = nil
+			part.Color = originalColor1
+			part2.Color = originalColor2
+			touched = false
+		end)
+	end
+	if not touched then
+		touched = true
+		print('touched')
+		part.Color = Color3.fromRGB(43, 255, 29)
+		part2.Color = Color3.fromRGB(43, 255, 29)
+		
+	end
+end)
