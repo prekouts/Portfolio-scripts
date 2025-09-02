@@ -1,5 +1,4 @@
 local rocket = workspace:FindFirstChild("rocket")
-local fuel = 100 
 
 script.Parent.ClickDetector.MouseClick:Connect(function()
 	if rocket and rocket:IsA("BasePart") then
