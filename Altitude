@@ -1,0 +1,16 @@
+local sign = script.Parent
+local surfaceGui = sign:FindFirstChildOfClass("SurfaceGui")
+local textLabel = surfaceGui:FindFirstChildOfClass("TextLabel")
+local rocket = workspace:FindFirstChild("rocket")
+
+if not (rocket and surfaceGui and textLabel) then
+	warn("Missing components for altitude sign")
+	return
+end
+
+while true do
+	local altitude = math.floor(rocket.Position.Y-8)
+	textLabel.Text = tostring(altitude)
+	task.wait(0.05)
+end
+
