@@ -1,0 +1,13 @@
+local rocket = workspace:WaitForChild("rocket") 
+local spawnCFrame = rocket.CFrame
+
+local function resetRocket()
+	rocket.CFrame = spawnCFrame
+	rocket.Velocity = Vector3.new(0, 0, 0) 
+	rocket.RotVelocity = Vector3.new(0, 0, 0) 
+end
+
+script.Parent.ClickDetector.MouseClick:Connect(function()
+	resetRocket()
+	
+end)
