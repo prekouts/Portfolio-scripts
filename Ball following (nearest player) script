@@ -1,0 +1,92 @@
+local players = game:GetService("Players")
+local ball = script.Parent
+local fire = script.Parent.Fire
+local RS = game:GetService("RunService")
+
+
+local gyro = Instance.new("BodyGyro")
+gyro.MaxTorque = Vector3.new(0, 0, 0) 
+gyro.P = 10000
+gyro.Parent = ball
+
+local torque = Instance.new("BodyAngularVelocity")
+torque.MaxTorque = Vector3.new(1e5, 1e5, 1e5) 
+torque.AngularVelocity = Vector3.new(0,0,0)
+torque.Parent = ball
+
+fire.Enabled = false
+
+
+local function followNearest() -- following the nearest player
+	local nearestPlayer = nil
+	local shortestDistance = math.huge
+	for i, player in ipairs(players:GetPlayers()) do
+		if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+			local distance = (player.Character.HumanoidRootPart.Position - ball.Position).Magnitude
+			if distance < shortestDistance then
+				shortestDistance = distance
+				nearestPlayer = player.Character
+			end
+		end
+	end
+	return nearestPlayer
+end
+
+local following
+local explodable = false
+local touching
+local db = false
+
+ball.ClickDetector.MouseClick:Connect(function()
+	if db then return end
+	db = true
+	ball.Anchored = false
+	fire.Enabled = true
+	task.wait(3)
+	followNearest()
+	following = RS.Heartbeat:Connect(function()
+		local target = followNearest()
+		if target then
+			local direction = (target.HumanoidRootPart.Position - ball.Position).Unit
+			local speed = 20
+			local rolldirection = direction:Cross(Vector3.new(0, 1, 0)) * speed
+			torque.AngularVelocity = -rolldirection
+		end
+	end)
+	touching = ball.Touched:Connect(function(hit)
+		if db then
+			local character = hit.Parent
+			local humanoid = nil
+			while character and not humanoid do
+				humanoid = character:FindFirstChild("Humanoid")
+				if not humanoid then
+					character = character.Parent
+				end
+			end
+			if humanoid and character then
+				local player = players:GetPlayerFromCharacter(character)
+				if player then
+					humanoid:TakeDamage(humanoid.MaxHealth)
+					local explosion = Instance.new("Explosion")
+					explosion.Position = player.Character.HumanoidRootPart.Position
+					explosion.BlastRadius = 1
+					explosion.BlastPressure = 50
+					explosion.Parent = workspace
+					if following then
+						following:Disconnect()
+						following = nil
+						gyro.MaxTorque = Vector3.new(0, 0, 0)
+						torque.AngularVelocity = Vector3.new(0,0,0)
+						fire.Enabled = false
+						ball.Anchored = true
+						
+						touching:Disconnect()
+						explosion = nil
+						db = false
+					end
+				end
+			end
+		end
+	end)
+end)
+
